@@ -46,7 +46,7 @@ add_block <- function(build,
            where$w + block$width,
            where$h + block$height] <- new_block_id
 
-  return(list(grid = ,
+  return(list(grid = new_grid,
               blocks = c(build$blocks, block)))
 }
 

@@ -11,13 +11,151 @@ new_build <- function(length,
                       width,
                       height)
 {
-  return(
-    list(grid = array(data = 0,
-                      dim = c(length, width, height),
-                      dimnames = c('length', 'width', 'height')),
-         blocks = NULL)
-  )
+    return(
+        list(grid = array(data = 0,
+                          dim = c(length, width, height),
+                          dimnames = c('length', 'width', 'height')),
+             blocks = NULL)
+    )
 }
+
+# better
+new_build <-
+    function(
+        space = new_space(),
+        blockset = new_blockset()
+    )
+    {
+        list(
+            space = space,
+            blocks = blocks,
+            valid_flag = TRUE
+        )
+    }
+
+new_space <-
+    function(
+        width = 10,
+        depth = 10,
+        height = 10
+    )
+    {
+        list(
+            xmin = 0,
+            width = width,
+            xmax = width,
+            ymin = 0,
+            depth = depth,
+            ymax = depth,
+            zmin = 0,
+            height = height,
+            zmax = height
+        )
+    }
+
+new_blockset <-
+    function(
+        name = 'classic_bucket'
+    )
+    {
+        readr::read_csv(
+            file = list.files(
+                pattern = name,
+                recursive = TRUE
+            ),
+            col_types = 'cciccccci'
+        ) %>%
+            dplyr::select(partID = PartID,
+                          quantity = Quantity,
+                          color = Colour,
+                          designID = DesignID,
+                          part_name = PartName)
+    }
+
+check_build <-
+    function(
+        build
+    )
+    {
+        check_blocks_sufficient(build = build)
+        check_for_collisions(build = build)
+        check_for_unsupported_blocks(build = build)
+        check_within_bounds(build = build)
+        return(build)
+    }
+
+
+within_space <-
+    function(
+        block,
+        space
+    )
+    {
+        all(
+            space$xmin < block$xmin,
+            block$xmax < space$xmax,
+            space$ymin < block$ymin,
+            block$ymax < space$ymax,
+            space$zmin < block$zmin,
+            block$zmax < space$zmax
+        )
+    }
+
+supports <-
+    function(
+        a,
+        b
+    )
+    {
+        # a and b must overlap in x and y plane
+        # and the top of a must touch the bottom of b
+        all(
+            purrr::map_lgl(
+                .x = c('x', 'y'),
+                .f = overlaps,
+                a = a,
+                b = b
+            ),
+            a$zmax == b$zmin
+        )
+    }
+
+
+collides_with <-
+    function(
+        a,
+        b
+    )
+    {
+        all(
+            purrr::map_lgl(
+                .x = c('x', 'y', 'z'),
+                .f = overlaps,
+                a = a,
+                b = b
+            )
+        )
+    }
+
+overlaps <-
+    function(
+        a,
+        b,
+        dimension
+    )
+    {
+        stopifnot(all(is_block(a), is_block(b)))
+
+        switch(
+            EXPR = dimension,
+            x = max(a$xmin, b$xmin) < min(a$xmax, b$xmax),
+            y = max(a$ymin, b$ymin) < min(a$ymax, b$ymax),
+            z = max(a$zmin, b$zmin) < min(a$zmax, b$zmax)
+        )
+    }
+
+
+
 
 #' Add a block to a build
 #'
@@ -37,17 +175,17 @@ add_block <- function(build,
                       where)
 {
 
-  stopifnot(fits(block = block, build = build, where))
+    stopifnot(fits(block = block, build = build, where))
 
-  new_block_id <- length(build$blocks) +1
+    new_block_id <- length(build$blocks) +1
 
-  new_grid <- build$grid
-  new_grid[where$l + block$length,
-           where$w + block$width,
-           where$h + block$height] <- new_block_id
+    new_grid <- build$grid
+    new_grid[where$l + block$length,
+             where$w + block$width,
+             where$h + block$height] <- new_block_id
 
-  return(list(grid = new_grid,
-              blocks = c(build$blocks, block)))
+    return(list(grid = new_grid,
+                blocks = c(build$blocks, block)))
 }
 
 
@@ -77,23 +215,23 @@ add_wall <- function(build,
                      offset = 2)
 {
 
-  if (grid_colinear(x = where_start, y = where_stop)) {
-    stop('The start and stop location for this wall are colinear.')
-  }
-  if (!grid_coplanar(x = where_start, y = where_stop)) {
-    stop('The start and stop location for this wall are not coplanar.')
-  }
-  current_where <- where_start
+    if (grid_colinear(x = where_start, y = where_stop)) {
+        stop('The start and stop location for this wall are colinear.')
+    }
+    if (!grid_coplanar(x = where_start, y = where_stop)) {
+        stop('The start and stop location for this wall are not coplanar.')
+    }
+    current_where <- where_start
 
-  # while loop
+    # while loop
 }
 
 
 
 grid_colinear <- function(x, y) {
-  sum(purrr::map2_int(x, y, `==`) == 2)
+    sum(purrr::map2_int(x, y, `==`) == 2)
 }
 grid_coplanar <- function(x, y)
 {
-  sum(purrr::map2_int(x, y, `==`) == 1)
+    sum(purrr::map2_int(x, y, `==`) == 1)
 }

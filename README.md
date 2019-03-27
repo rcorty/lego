@@ -1,14 +1,4 @@
 
--   [lego](#lego)
-    -   [Installation](#installation)
-    -   [Setup](#setup)
-    -   [Example 1](#example-1)
-    -   [Example 2](#example-2)
-    -   [Example 3](#example-3)
-    -   [Example 4](#example-4)
-    -   [Example 5](#example-5)
-    -   [Colors](#colors)
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 lego
 ====

@@ -1,8 +1,6 @@
 ---
 output:
-    github_document:
-        toc: true
-        toc_depth: 2
+    github_document
 editor_options:
     chunk_output_type:
         console

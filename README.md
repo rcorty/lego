@@ -1,4 +1,14 @@
 
+-   [lego](#lego)
+    -   [Installation](#installation)
+    -   [Setup](#setup)
+    -   [Example 1](#example-1)
+    -   [Example 2](#example-2)
+    -   [Example 3](#example-3)
+    -   [Example 4](#example-4)
+    -   [Example 5](#example-5)
+    -   [Colors](#colors)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 lego
 ====
@@ -105,6 +115,47 @@ If we render an image and/or a 3D image of `build2`, it will be the same as `bui
 Example 3
 ---------
 
+Let's lay some more blocks of different types in different places.
+
+Some examples that work.
+
+\[do it here\]
+
+Now some that generate warning messages.
+
+\[do it here\]
+
+See, we can change the options to not hassle us about builds that have various faults. Let's say I don't want to hear about using blocks that aren't in my blockset or placing blocks unsupported.
+
+\[do it here\]
+
+Now we can rerun that code that gave those warnings.
+
+\[do it here\]
+
+Great...no warnings. But, we didn't actually fix anything.
+
+When we `check_build`, of course we get those warnings back.
+
+\[do it here\]
+
+So how can we really address them? Well, for a warning about using a block that's not in the blockset, we can just add to the blockset.
+
+\[do it here\]
+
+Remember, we're all digital at this point, so blocks are free. You may want to go on [Pick-A-Brick](https://shop.lego.com/en-US/Pick-a-Brick) or [bricklink](https://www.bricklink.com/v2/main.page) to figure out how to get the blocks you need for a price you can afford. `lego` will output a list of blocks you ended up using, which should be helpful.
+
+To address the warning about unsupported `block`s, we can simply unlay the unsupported blocks and view the `build` again to see if we're happy without them.
+
+\[do it here\]
+
+If we're not happy without those `blocks` laid, we'll have to re-design.
+
+\[do it here\]
+
+Example 4
+---------
+
 Now I want to build a house. I can make a simple house with:
 
 ``` r
@@ -142,7 +193,7 @@ render_image(build = build3)
 render_3D(build = build3)
 ```
 
-Example 4
+Example 5
 ---------
 
 Add features to `tube` like windows? Save a point in space based on being a corner of one layer, then refer to it in future layers?
